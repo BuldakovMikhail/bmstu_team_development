@@ -357,12 +357,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -421,12 +415,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -479,12 +467,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -549,12 +531,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -602,12 +578,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -705,14 +675,6 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.CategoryId": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "handlers.CategoryResponse": {
             "type": "object",
             "properties": {
@@ -741,7 +703,7 @@ const docTemplate = `{
                 "category_ids": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/handlers.CategoryId"
+                        "type": "string"
                     }
                 },
                 "description": {
@@ -775,24 +737,27 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.TaskShortResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "is_done": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.TasksList": {
             "type": "object",
             "properties": {
                 "list": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string"
-                            },
-                            "is_done": {
-                                "type": "boolean"
-                            },
-                            "title": {
-                                "type": "string"
-                            }
-                        }
+                        "$ref": "#/definitions/handlers.TaskShortResponse"
                     }
                 }
             }

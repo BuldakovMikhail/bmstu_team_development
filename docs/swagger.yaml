@@ -12,11 +12,6 @@ definitions:
       name:
         type: string
     type: object
-  handlers.CategoryId:
-    properties:
-      id:
-        type: string
-    type: object
   handlers.CategoryResponse:
     properties:
       id:
@@ -35,7 +30,7 @@ definitions:
     properties:
       category_ids:
         items:
-          $ref: '#/definitions/handlers.CategoryId'
+          type: string
         type: array
       description:
         type: string
@@ -57,18 +52,20 @@ definitions:
       title:
         type: string
     type: object
+  handlers.TaskShortResponse:
+    properties:
+      id:
+        type: string
+      is_done:
+        type: boolean
+      title:
+        type: string
+    type: object
   handlers.TasksList:
     properties:
       list:
         items:
-          properties:
-            id:
-              type: string
-            is_done:
-              type: boolean
-            title:
-              type: string
-          type: object
+          $ref: '#/definitions/handlers.TaskShortResponse'
         type: array
     type: object
   handlers.Token:
@@ -315,10 +312,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/response.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -392,10 +385,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/response.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -427,10 +416,6 @@ paths:
           description: OK
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/response.Response'
         "500":
@@ -472,10 +457,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/response.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -511,10 +492,6 @@ paths:
             $ref: '#/definitions/handlers.TasksList'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/response.Response'
         "500":

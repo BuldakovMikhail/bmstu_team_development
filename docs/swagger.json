@@ -351,12 +351,6 @@
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -415,12 +409,6 @@
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -473,12 +461,6 @@
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -543,12 +525,6 @@
                             "$ref": "#/definitions/response.Response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -596,12 +572,6 @@
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -699,14 +669,6 @@
                 }
             }
         },
-        "handlers.CategoryId": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "handlers.CategoryResponse": {
             "type": "object",
             "properties": {
@@ -735,7 +697,7 @@
                 "category_ids": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/handlers.CategoryId"
+                        "type": "string"
                     }
                 },
                 "description": {
@@ -769,24 +731,27 @@
                 }
             }
         },
+        "handlers.TaskShortResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "is_done": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.TasksList": {
             "type": "object",
             "properties": {
                 "list": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string"
-                            },
-                            "is_done": {
-                                "type": "boolean"
-                            },
-                            "title": {
-                                "type": "string"
-                            }
-                        }
+                        "$ref": "#/definitions/handlers.TaskShortResponse"
                     }
                 }
             }
