@@ -1,11 +1,11 @@
 package auth_utils
 
 import (
-	"annotater/internal/models"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
+	"todolist/internal/models"
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -41,7 +41,7 @@ func (hasher JWTTokenHandler) GenerateToken(credentials models.User, key string)
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"exprires": time.Now().Add(time.Hour * 24),
-			"login":    credentials.Login,
+			"name":     credentials.Name,
 			"ID":       credentials.ID,
 		})
 	tokenString, err := token.SignedString([]byte(key))
@@ -77,10 +77,10 @@ func (hasher JWTTokenHandler) ParseToken(tokenString string, key string) (*Paylo
 		return nil, errors.Wrap(err, "failed to parse token")
 	}
 
-	userID, err := uuid.Parse(claims["ID"])
+	userID, err := uuid.Parse(claims["ID"].(string))
 
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse the ID of user with login %v", claims["login"])
+		return nil, errors.Wrapf(err, "failed to parse the ID of user with login %v", claims["login"])
 	}
 
 	payload := &Payload{
