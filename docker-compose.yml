@@ -3,9 +3,10 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
+    env_file: .env
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: taskdb
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -17,9 +18,10 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
+    env_file: .env
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "8080:80"
     depends_on:
