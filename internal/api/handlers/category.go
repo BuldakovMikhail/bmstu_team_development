@@ -28,8 +28,6 @@ type CategoriesResponse struct {
 type CategoriesProvider interface {
 	CreateCategory(ctx context.Context, category *models.CategoryBody) error
 	Delete(ctx context.Context, id uuid.UUID) error
-	GetByID(ctx context.Context, id uuid.UUID) (*models.Category, error)
-	GetByTaskID(ctx, id uuid.UUID) ([]models.Category, error)
 	GetAll(ctx context.Context, pageIndex, recordsPerPage int) ([]models.Category, error)
 }
 
