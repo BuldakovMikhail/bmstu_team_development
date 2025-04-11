@@ -12,6 +12,23 @@ services:
       - ./db_init:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+    networks:
+      - pgnetwork
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - pgnetwork
 
 volumes:
   postgres_data:
+
+networks:
+  pgnetwork:
