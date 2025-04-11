@@ -5,6 +5,7 @@ import (
 	"todolist/internal/models"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -79,4 +80,42 @@ func (repo *UserRepositoryAdapter) CreateUser(user *models.UserAuth) error {
 		return errors.Wrap(tx.Error, "error in creating user")
 	}
 	return nil
+}
+
+func (repo *UserRepositoryAdapter) CheckTaskOwnership(userID uuid.UUID, taskID uuid.UUID) (bool, error) {
+	var isOwned bool
+
+	err := repo.db.
+		Raw(
+			"SELECT EXISTS(SELECT 1 FROM task WHERE id = ? AND user_id = ?)",
+			taskID,
+			userID,
+		).
+		Scan(&isOwned).
+		Error
+
+	if err != nil {
+		return false, errors.Wrap(err, "failed to verify task ownership")
+	}
+
+	return isOwned, nil
+}
+
+func (repo *UserRepositoryAdapter) CheckCategoriesOwnership(userID uuid.UUID, categories []uuid.UUID) (bool, error) {
+	if len(categories) == 0 {
+		return true, nil
+	}
+
+	var allOwned bool
+	err := repo.db.Raw(`
+        SELECT NOT EXISTS (
+            SELECT 1 FROM categories 
+            WHERE id IN (?) 
+            AND user_id != ?
+        )`,
+		pq.Array(categories),
+		userID,
+	).Scan(&allOwned).Error
+
+	return allOwned, errors.Wrap(err, "failed raw ownership check")
 }

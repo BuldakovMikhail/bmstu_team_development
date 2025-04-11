@@ -16,9 +16,11 @@ type IUserRepository interface {
 	GetUserByName(name string) (*models.User, error)
 	GetUserByID(id uuid.UUID) (*models.User, error)
 	CreateUser(user *models.UserAuth) error
+	CheckTaskOwnership(userID uuid.UUID, taskID uuid.UUID) (bool, error)
+	CheckCategoriesOwnership(userID uuid.UUID, categories []uuid.UUID) (bool, error)
 }
 
-type AuthAdapter struct {
+type UserAdapter struct {
 	logger       *logrus.Logger
 	userRepo     IUserRepository
 	key          string
@@ -26,7 +28,7 @@ type AuthAdapter struct {
 }
 
 func NewAuthService(loggerSrc *logrus.Logger, repo IUserRepository, token auth_utils.ITokenHandler, k string) handlers.AuthProvider {
-	return &AuthAdapter{
+	return &UserAdapter{
 		logger:       loggerSrc,
 		userRepo:     repo,
 		tokenHandler: token,
@@ -34,7 +36,7 @@ func NewAuthService(loggerSrc *logrus.Logger, repo IUserRepository, token auth_u
 	}
 }
 
-func (serv *AuthAdapter) SignUp(candidate *models.UserAuth) error {
+func (serv *UserAdapter) SignUp(candidate *models.UserAuth) error {
 	var err error
 	if candidate.Name == "" {
 		err = errors.New("Failed to login with empty login")
@@ -66,7 +68,7 @@ func (serv *AuthAdapter) SignUp(candidate *models.UserAuth) error {
 	return nil
 }
 
-func (serv *AuthAdapter) SignIn(candidate *models.UserAuth) (string, error) {
+func (serv *UserAdapter) SignIn(candidate *models.UserAuth) (string, error) {
 	var user *models.User
 	var err error
 	var tokenStr string
@@ -102,4 +104,22 @@ func (serv *AuthAdapter) SignIn(candidate *models.UserAuth) (string, error) {
 	}
 	serv.logger.Infof("auth svc - successfully signed in as user with login %v", candidate.Name)
 	return tokenStr, nil
+}
+
+func (serv *UserAdapter) CheckTaskOwnership(userID uuid.UUID, taskID uuid.UUID) (bool, error) {
+	isTaskOwned, err := serv.CheckTaskOwnership(userID, taskID)
+	if err != nil {
+		serv.logger.Infof("Error in checking task ownership for task for user %v: %v", userID, err)
+		return false, errors.Wrap(err, "Error in checking task ownership")
+	}
+	return isTaskOwned, nil
+}
+
+func (serv *UserAdapter) CheckCategoriesOwnership(userID uuid.UUID, categories []uuid.UUID) (bool, error) {
+	areCategoriesOwned, err := serv.CheckCategoriesOwnership(userID, categories)
+	if err != nil {
+		serv.logger.Infof("Error in checking categories ownership for task for user %v: %v", userID, err)
+		return false, errors.Wrap(err, "Error in checking task ownership")
+	}
+	return areCategoriesOwned, nil
 }

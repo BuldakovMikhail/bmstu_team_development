@@ -10,6 +10,7 @@ import (
 	"todolist/internal/pkg/response"
 
 	"github.com/go-chi/render"
+	"github.com/google/uuid"
 )
 
 type UserInfo struct {
@@ -24,6 +25,8 @@ type Token struct {
 type AuthProvider interface {
 	SignIn(candidate *models.UserAuth) (tokenStr string, err error)
 	SignUp(candidate *models.UserAuth) error
+	CheckTaskOwnership(userID uuid.UUID, taskID uuid.UUID) (bool, error)
+	CheckCategoriesOwnership(userID uuid.UUID, categories []uuid.UUID) (bool, error)
 }
 
 func FromUserInfo(userDTO UserInfo) *models.UserAuth {
