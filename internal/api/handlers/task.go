@@ -209,7 +209,7 @@ func GetAllTasks(taskProvider TaskProvider, timeout time.Duration) http.HandlerF
 			return
 		}
 
-		render.JSON(w, r, tasks)
+		render.JSON(w, r, toTaskList(tasks))
 	}
 }
 
