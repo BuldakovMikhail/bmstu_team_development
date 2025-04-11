@@ -134,8 +134,15 @@ func GetCategories(categoryProvider CategoriesProvider, timeout time.Duration) h
 		ctx := r.Context()
 		ctx, cancel := context.WithTimeout(ctx, timeout)
 		defer cancel()
+
 		var categories []models.Category
 		categories, err = categoryProvider.GetAll(ctx, req.PageIndex, req.RecordsPerPage)
+		if err != nil {
+			render.Status(r, http.StatusInternalServerError)
+			render.JSON(w, r, response.Error(err.Error()))
+			return
+		}
+
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, toCategoriesResponse(categories))
 	}
