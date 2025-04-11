@@ -5,6 +5,7 @@ import (
 	"todolist/internal/models"
 	auth_utils "todolist/internal/pkg/authUtils"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 
@@ -12,8 +13,8 @@ import (
 )
 
 type IUserRepository interface {
-	GetUserByLogin(login string) (*models.User, error)
-	GetUserByID(id uint64) (*models.User, error)
+	GetUserByName(name string) (*models.User, error)
+	GetUserByID(id uuid.UUID) (*models.User, error)
 	CreateUser(user *models.UserAuth) error
 }
 
@@ -80,7 +81,7 @@ func (serv *AuthAdapter) SignIn(candidate *models.UserAuth) (string, error) {
 		serv.logger.Info(err)
 		return "", err
 	}
-	user, err = serv.userRepo.GetUserByLogin(candidate.Name)
+	user, err = serv.userRepo.GetUserByName(candidate.Name)
 
 	if err != nil {
 		err = errors.Wrapf(err, "Failed to get user %s", candidate.Name)
