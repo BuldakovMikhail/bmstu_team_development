@@ -16,6 +16,7 @@ type IUserRepository interface {
 	GetUserByName(name string) (*models.User, error)
 	GetUserByID(id uuid.UUID) (*models.User, error)
 	CreateUser(user *models.UserAuth) error
+	DeleteUser(userID uuid.UUID) error
 }
 
 type AuthAdapter struct {
@@ -102,4 +103,13 @@ func (serv *AuthAdapter) SignIn(candidate *models.UserAuth) (string, error) {
 	}
 	serv.logger.Infof("auth svc - successfully signed in as user with login %v", candidate.Name)
 	return tokenStr, nil
+}
+
+func (serv *AuthAdapter) DeleteUser(userID uuid.UUID) error {
+	err := serv.userRepo.DeleteUser(userID)
+	if err != nil {
+		err = errors.Wrapf(err, "Failed to delete user with id %v", userID)
+		serv.logger.Info(err)
+	}
+	return err
 }

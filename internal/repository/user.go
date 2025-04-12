@@ -80,3 +80,18 @@ func (repo *UserRepositoryAdapter) CreateUser(user *models.UserAuth) error {
 	}
 	return nil
 }
+
+func (repo *UserRepositoryAdapter) DeleteUser(userID uuid.UUID) error {
+
+	tx := repo.db.Delete(&User{}, "id = ?", userID)
+	if tx.Error != nil {
+		return errors.Wrap(tx.Error, "error deleting user")
+	}
+
+	// Check if any row was actually deleted
+	if tx.RowsAffected == 0 {
+		return models.ErrUserNotFound
+	}
+
+	return nil
+}
