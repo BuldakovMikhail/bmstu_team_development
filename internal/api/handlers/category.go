@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"time"
 	"todolist/internal/models"
@@ -98,7 +99,11 @@ func DeleteCategory(categoryProvider CategoriesProvider, timeout time.Duration) 
 
 		err = categoryProvider.Delete(ctx, uuid)
 		if err != nil {
-			render.Status(r, http.StatusInternalServerError)
+			if errors.Is(err, models.ErrCategoryNotFound) {
+				render.Status(r, http.StatusNotFound)
+			} else {
+				render.Status(r, http.StatusInternalServerError)
+			}
 			render.JSON(w, r, response.Error(err.Error()))
 			return
 		}
@@ -115,7 +120,7 @@ func DeleteCategory(categoryProvider CategoriesProvider, timeout time.Duration) 
 // @Produce  json
 // @Param input body Pagination true "pagination info"
 // @Success 200 {object} CategoriesResponse
-// @Failure 400,404 {object} response.Response
+// @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
 // @Failure default {object} response.Response
 // @Router /api/v1/category/all [post]
