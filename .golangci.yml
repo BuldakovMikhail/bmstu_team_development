@@ -1,0 +1,20 @@
+version: "2"
+linters:
+  enable:
+    - errcheck
+    - staticcheck
+    - gocritic
+    - gocyclo
+    - dupl
+    - misspell
+    - goconst
+    - gosec
+    - prealloc
+    - nestif
+    - bodyclose
+    - contextcheck
+run:
+  skip-dirs:
+    - "vendor"
+    - "testdata"
+  timeout: 5m

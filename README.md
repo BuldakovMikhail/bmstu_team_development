@@ -14,7 +14,7 @@ PGADMIN_PASSWORD=supersecret!
 
 **запуститься** 
 ```bash 
-docker-compose down -v
+docker-compose up --build
 ```
 
 **выключить и удалить бд**
